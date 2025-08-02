@@ -1,4 +1,5 @@
-# Dashboard_v1.0  
+# Add a section on setting Dashboard_v1.0.html as the homepage in Edge and Chrome.
+updated_readme = """# Dashboard_v1.0  
 **Created by:** BLK3L53Y  
 **Created on:** 2025-08-02  
 
@@ -44,7 +45,7 @@ Works best in Microsoft Edge or Google Chrome.
 | **Home**         | View all your link categories and buttons |
 | **Settings**     | Access all site options and customization |
 | **Open File**    | Opens a file selection dialog (for future features/import) |
-| **Open Directory** | Opens your main Windows directory (`C:\`) in a new browser tab |
+| **Open Directory** | Opens your main Windows directory (`C:\\`) in a new browser tab |
 | **Theme Toggle** | Switch between dark and light mode |
 | **Color Swatch** | Change accent color theme |
 | **Update Site Name** | Set custom dashboard title |
@@ -91,12 +92,42 @@ Works best in Microsoft Edge or Google Chrome.
 
 ---
 
+## Setting Dashboard_v1.0 as Your Home Page
+
+You can set `Dashboard_v1.0.html` as the homepage or startup page in your browser for instant access every time you open Edge or Chrome.
+
+### Microsoft Edge
+
+1. Open Edge.
+2. Go to `Settings` > `Start, home, and new tabs`.
+3. Under "When Edge starts," select **Open these pages**.
+4. Click **Add a new page**.
+5. Click **Browse** and select your `Dashboard_v1.0.html` file from your PC, or enter the full file path (e.g., `file:///C:/Users/YourName/Desktop/Dashboard_v1.0.html`).
+6. (Optional) Also set as **Home button**:  
+   - Go to `Appearance` > turn on **Show home button on the toolbar** > **Enter URL** > paste the file path above.
+
+### Google Chrome
+
+1. Open Chrome.
+2. Go to `Settings` > `On startup`.
+3. Select **Open a specific page or set of pages**.
+4. Click **Add a new page**.
+5. Enter the full file path to `Dashboard_v1.0.html` (e.g., `file:///C:/Users/YourName/Desktop/Dashboard_v1.0.html`).
+6. (Optional) Set as **Home button**:  
+   - Go to `Appearance` > turn on **Show Home button** > **Enter custom web address** > paste your file path.
+
+**Tip:**  
+- Always use three forward slashes for the file path: `file:///C:/...`
+- If you move the HTML file, update the path in browser settings.
+
+---
+
 ## File/Folder Features
 
 | Control         | Description |
 |:---------------|:------------|
 | **Open File**  | Opens a file picker (used for import; does not alter site by itself) |
-| **Open Directory** | Opens `C:\` in a new browser tab (works on Windows/Edge/Chrome only) |
+| **Open Directory** | Opens `C:\\` in a new browser tab (works on Windows/Edge/Chrome only) |
 
 ---
 
@@ -149,3 +180,7 @@ Free to modify, remix, or share—credit to [BLK3L53Y](https://github.com/BLK3L5
 ---
 
 # 🚀 Enjoy using Dashboard_v1.0!
+"""
+
+with open("/mnt/data/Dashboard_v1.0_README.md", "w", encoding="utf-8") as f:
+    f.write(updated_readme)
