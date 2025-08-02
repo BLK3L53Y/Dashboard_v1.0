@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard v4.7</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            transition: all 0.3s;
+            padding: 20px;
+            background-color: #121212;
+            --section-bg: rgba(255, 255, 255, 0.1);
+            --text-color: #fff;
+            --button-gradient: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            --plus-button-bg: #333;
+            --border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px; /* Increased max-width to allow 4 columns */
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page {
+            display: none;
+        }
+
+            .page.active {
+                display: block;
+                text-align: center;
+            }
+
+        nav {
+            margin-bottom: 40px;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+            nav button {
+                background: #222;
+                color: #fff;
+                padding: 14px 32px;
+                font-size: 18px;
+                border-radius: 8px;
+                border: none;
+                box-shadow: none;
+                font-weight: bold;
+                transition: background 0.3s, color 0.3s;
+            }
+
+                nav button.active, nav button:focus {
+                    background: var(--primary-color);
+                    color: #fff;
+                    outline: 2px solid var(--primary-color);
+                }
+
+                nav button:hover {
+                    background: var(--primary-color);
+                    color: #fff;
+                }
+
+            nav .mnb {
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                border: none;
+                color: #fff;
+                padding: 8px 20px;
+                cursor: pointer;
+                font-size: 14px;
+                border-radius: 15px;
+                transition: background 0.3s;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                font-weight: bold;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+                nav .mnb:hover {
+                    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+                }
+
+        #settings.page {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+            .settings-row input[type="text"],
+            .settings-row select {
+                background: #222;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 14px 16px;
+                font-size: 18px;
+                min-width: 220px;
+                margin-right: 0;
+            }
+
+            .settings-row select {
+                min-width: 180px;
+            }
+
+            .settings-row label {
+                color: #fff;
+                font-size: 18px;
+                font-weight: bold;
+                background: none;
+                padding: 0;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                margin-left: 0;
+                display: inline-block;
+            }
+
+            .light-theme .settings-row label {
+                color: #000;
+            }
+
+            .settings-row .link-button {
+                background: var(--primary-color);
+                color: #fff;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 18px;
+                padding: 14px 32px;
+                box-shadow: none;
+                border: none;
+                margin-left: 0;
+            }
+
+                .settings-row .link-button:hover {
+                    background: var(--secondary-color);
+                }
+
+        .settings-actions {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+            .settings-actions .link-button {
+                background: var(--primary-color);
+                color: #fff;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 18px;
+                padding: 14px 32px;
+                box-shadow: none;
+                border: none;
+            }
+
+                .settings-actions .link-button:hover {
+                    background: var(--secondary-color);
+                }
+
+        .settings-form {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 0px;
+            align-items: flex-end;
+        }
+
+            .settings-form input[type="text"],
+            .settings-form select {
+                background: #222;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                padding: 14px 16px;
+                font-size: 18px;
+                min-width: 220px;
+            }
+
+            .settings-form select {
+                min-width: 180px;
+            }
+
+            .settings-form .link-button {
+                background: var(--primary-color);
+                color: #fff;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 18px;
+                padding: 14px 32px;
+                box-shadow: none;
+                border: none;
+            }
+
+                .settings-form .link-button:hover {
+                    background: var(--secondary-color);
+                }
+
+                .settings-form .link-button:last-child {
+                    margin-left: 20px;
+                }
+
+            .settings-form .add-btn {
+                min-width: 180px;
+            }
+
+        .settings-actions .link-button:last-child {
+            margin-left: 20px;
+        }
+
+        .site-name {
+            font-size: 56px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: var(--primary-color);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px; /* Increased max-width to allow 4 columns */
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .page {
+            display: none;
+        }
+
+            .page.active {
+                display: block;
+                text-align: center;
+            }
+
+        nav {
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            nav button {
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                border: none;
+                color: #fff;
+                padding: 8px 20px;
+                cursor: pointer;
+                font-size: 14px;
+                border-radius: 15px;
+                transition: background 0.3s;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+                nav button:hover {
+                    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+                }
+
+            nav .mnb {
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                border: none;
+                color: #fff;
+                padding: 8px 20px;
+                cursor: pointer;
+                font-size: 14px;
+                border-radius: 15px;
+                transition: background 0.3s;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                font-weight: bold;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+                nav .mnb:hover {
+                    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+                }
+
+        .category {
+            margin-bottom: 20px;
+        }
+
+        details {
+            margin: 10px 0;
+            background-color: var(--section-bg);
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%; /* Stretch category box to match grid width */
+            box-sizing: border-box;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 5px;
+            color: var(--text-color);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns wide on desktop */
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                max-width: 800px;
+            }
+
+            .button-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr; /* 1 column for mobile */
+            }
+        }
+
+        .button-item {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .button-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .link-button {
+            flex-grow: 1;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            color: white;
+            background: var(--button-gradient);
+            border: none;
+            border-radius: 12px 0 0 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+            .link-button:hover {
+                filter: brightness(1.2);
+            }
+
+        .note-button {
+            padding: 12px;
+            font-size: 1.1em;
+            color: white;
+            background: var(--plus-button-bg);
+            border: none;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .button-item:hover .note-button {
+            background: var(--button-gradient);
+            color: white;
+        }
+
+        #newCategoryInButton {
+            display: none;
+            margin-top: 5px;
+            width: 200px;
+            padding: 5px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222 !important;
+            color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            z-index: 1000;
+            width: 960px;
+            min-height: 200px;
+            max-height: 80vh;
+            height: auto;
+        }
+        .popup-content {
+            text-align: center;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        .light-theme .popup {
+            background-color: #e0e0e0;
+            color: #000;
+        }
+
+        .popup-content {
+            text-align: center;
+        }
+
+            .popup-content input {
+                width: 200px;
+                margin: 10px 0;
+                padding: 5px;
+                border-radius: 5px;
+                border: none;
+                background-color: var(--section-bg);
+                color: var(--text-color);
+            }
+
+            .popup-content button {
+                padding: 8px 15px;
+                margin: 0 5px;
+                border: none;
+                border-radius: 15px;
+                cursor: pointer;
+                font-size: 14px;
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                color: #fff;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+                .popup-content button:hover {
+                    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+                }
+
+        .popup-content-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content-row input {
+            width: 120px;
+            margin: 0;
+        }
+
+        .popup-content-row button {
+            margin: 0;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .site-name {
+            font-size: 56px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: var(--primary-color);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .footer-link {
+            font-size: 24px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+
+            .footer-link:hover {
+                text-decoration: underline;
+            }
+
+        /* Theme and Color Swatch Styles */
+        .dark-theme {
+            background-color: #121212;
+            color: #fff;
+        }
+
+        .light-theme {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+
+            .light-theme summary {
+                color: #000;
+            }
+
+            .light-theme #editContent {
+                background-color: #e0e0e0;
+            }
+
+            .light-theme .edit-item button {
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                color: #fff;
+            }
+
+                .light-theme .edit-item button:hover {
+                    background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+                }
+
+            .light-theme .save-cancel button {
+                color: #fff;
+            }
+
+            .light-theme .popup {
+                background-color: #e0e0e0;
+                color: #000;
+            }
+
+            .light-theme .popup-content button {
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                color: #fff;
+            }
+
+            .light-theme footer {
+                color: rgba(0, 0, 0, 0.6);
+            }
+
+            .light-theme .footer-link {
+                color: rgba(0, 0, 0, 0.6);
+            }
+
+        .swatch-default {
+            --primary-color: #3498db;
+            --secondary-color: #1abc9c;
+        }
+
+        .swatch-purple {
+            --primary-color: #9b59b6;
+            --secondary-color: #e91e63;
+        }
+
+        .swatch-green {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+        }
+
+        .swatch-orange {
+            --primary-color: #e67e22;
+            --secondary-color: #f1c40f;
+        }
+
+        .swatch-red {
+            --primary-color: #e74c3c;
+            --secondary-color: #e74c3c;
+        }
+
+        .swatch-teal {
+            --primary-color: #16a085;
+            --secondary-color: #1abc9c;
+        }
+
+        .swatch-indigo {
+            --primary-color: #8e44ad;
+            --secondary-color: #9b59b6;
+        }
+
+        .swatch-amber {
+            --primary-color: #f39c12;
+            --secondary-color: #f1c40f;
+        }
+
+        .button-item.invisible {
+            visibility: hidden;
+            pointer-events: none;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .popup-content textarea {
+            width: 98%;
+            height: 120px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+
+        .light-theme .popup-content small {
+            color: #fff !important;
+            font-size: 0.85em;
+        }
+
+        .edit-content-btn {
+            margin-top: 0;
+            min-width: 180px;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 14px 32px;
+            box-shadow: none;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .edit-content-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        #resetPopup .popup-content .save-cancel {
+            margin-top: 20px;
+        }
+
+        #resetPopup .popup-content h2 {
+            margin-bottom: 20px;
+        }
+
+        #resetSuccessPopup .popup-content {
+    text-align: center;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+#resetSuccessPopup .popup-content h2 {
+    margin-bottom: 20px;
+}
+#resetSuccessPopup .popup-content .save-cancel {
+    margin-top: 20px;
+}
+
+#importPopup .popup-content h2 {
+    margin-bottom: 20px;
+}
+#importPopup .popup-content .save-cancel {
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+<body class="dark-theme swatch-default">
+    <div class="container">
+        <h1 class="site-name">${data.siteName}</h1>
+        <nav>
+            <button onclick="showPage('home')" class="mnb">Home</button> <button onclick="showPage('settings')" class="mnb">Settings</button> <button id="openFileBtn" class="mnb">Open File</button> <a id="openDirectoryBtn" href="file:///C:/" target="_blank" class="mnb">Open Directory</a>
+        </nav>
+        <div id="home" class="page active">
+            <div id="categories"></div>
+        </div>
+        <div id="settings" class="page" style="display:none;">
+            <div class="settings-row" style="margin-bottom: 20px;">
+                <button class="link-button" id="themeToggleBtn" onclick="toggleTheme()">Theme Toggle Light/Dark</button>
+                <select id="colorSwatch" onchange="changeColorSwatch()">
+                    <option value="default">Default (Blue/Cyan)</option>
+                    <option value="purple">Purple/Magenta</option>
+                    <option value="green">Green/Lime</option>
+                    <option value="orange">Orange/Yellow</option>
+                    <option value="red">Red/Coral</option>
+                    <option value="teal">Teal/Aqua</option>
+                    <option value="indigo">Indigo/Violet</option>
+                    <option value="amber">Amber/Gold</option>
+                </select>
+                <label for="colorSwatch">Theme Color</label>
+            </div>
+            <div class="settings-row">
+                <input type="text" id="siteNameInput" placeholder="Enter Site Name"> <button class="link-button" onclick="updateSiteName()">Update Site Name</button>
+            </div>
+            <div class="settings-actions">
+                <button class="link-button" onclick="exportData()">Export Buttons</button> <button class="link-button" onclick="document.getElementById('importFile').click()">Import Buttons</button> <button class="link-button" onclick="showResetPopup()">Reset Dashboard</button>
+            </div>
+            <div class="settings-form">
+                <input type="text" id="newButtonName" placeholder="Enter Button Name"> <input type="text" id="buttonUrl" placeholder="Enter Button URL"> <select id="categorySelect" onchange="toggleNewCategoryInput()">
+                    <option value="">Select Category</option>
+                </select> <input type="text" id="newCategoryInButton" placeholder="New Category Name" style="display: none;"> <button class="link-button add-btn" onclick="addButton()">Add Button</button>
+            </div>
+            <div style="margin-top: 10px;">
+                <button class="link-button edit-content-btn" onclick="showEditContent()">Edit Content</button>
+            </div><input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none;">
+        </div>
+    </div>
+    <footer>
+        <a href="https://github.com/BLK3L53Y" class="footer-link" target="_blank">BLK3L53Y DESIGN</a>
+    </footer>
+    <div id="overlay"></div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2 id="popupTitle"></h2>
+            <p><small>DISCLAIMER: This webpage is intended to help users organize and quickly access frequently used links for personal or work related tasks. It is open-source and provided without warranty. Users may freely modify and redistribute this file. The creator assumes no responsibility for data loss, misuse, or errors. Passwords are stored locally and are not encrypted.</small></p>
+            <textarea id="popupNotes" placeholder="Enter notes" rows="4" cols="30"></textarea>
+            <div class="popup-content-row">
+                <input type="text" id="popupUsername" placeholder="Username">
+                <button onclick="copyToClipboard('popupUsername')">Copy</button>
+                <input type="password" id="popupPassword" placeholder="Password">
+                <button onclick="copyToClipboard('popupPassword')">Copy</button>
+            </div>
+            <div class="save-cancel">
+                <button onclick="savePopup()">Save</button> <button onclick="cancelPopup()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="resetPopup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <h2>Confirm Reset</h2>
+            <p>Are you sure you want to reset to default settings? This will overwrite all current data.</p>
+            <div class="save-cancel">
+                <button onclick="resetToDefaults()">Yes</button> <button onclick="cancelReset()">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="importPopup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <h2>Buttons Imported</h2>
+            <div class="save-cancel">
+                <button onclick="closeImportPopup()">OK</button>
+            </div>
+        </div>
+    </div><input type="file" id="fileInput" style="display: none;">
+    <div id="editContent" class="popup" style="display: none;">
+        <div class="popup-content">
+            <h2>Edit Content</h2>
+            <h3>Categories</h3>
+            <div id="editCategories"></div>
+            <h3>Buttons</h3>
+            <div id="editButtons"></div>
+            <div class="save-cancel">
+                <button id="saveAll" onclick="saveAll()">Save All</button> <button id="cancelEdit" onclick="cancelEdit()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+        let data = {
+            siteName: "My Dashboard",
+            categories: [
+                { id: '5', name: 'GitHub' },
+                { id: '1', name: 'Social Media' },
+                { id: '3', name: 'Shopping' },
+                { id: '4', name: 'Entertainment' }
+            ],
+            buttons: [
+                { id: 'b1', name: 'Facebook', url: 'https://www.facebook.com', categoryId: '1' },
+                { id: 'b2', name: 'Twitter', url: 'https://www.twitter.com', categoryId: '1' },
+                { id: 'b3', name: 'Instagram', url: 'https://www.instagram.com', categoryId: '1' },
+                { id: 'b4', name: 'LinkedIn', url: 'https://www.linkedin.com', categoryId: '1' },
+                { id: 'b5', name: 'Reddit', url: 'https://www.reddit.com', categoryId: '1' },
+                { id: 'b6', name: 'Pinterest', url: 'https://www.pinterest.com', categoryId: '1' },
+                { id: 'b13', name: 'Amazon', url: 'https://www.amazon.com', categoryId: '3' },
+                { id: 'b14', name: 'eBay', url: 'https://www.ebay.com', categoryId: '3' },
+                { id: 'b15', name: 'Walmart', url: 'https://www.walmart.com', categoryId: '3' },
+                { id: 'b16', name: 'Target', url: 'https://www.target.com', categoryId: '3' },
+                { id: 'b17', name: 'Etsy', url: 'https://www.etsy.com', categoryId: '3' },
+                { id: 'b18', name: 'Best Buy', url: 'https://www.bestbuy.com', categoryId: '3' },
+                { id: 'b19', name: 'YouTube', url: 'https://www.youtube.com', categoryId: '4' },
+                { id: 'b20', name: 'Netflix', url: 'https://www.netflix.com', categoryId: '4' },
+                { id: 'b21', name: 'Spotify', url: 'https://www.spotify.com', categoryId: '4' },
+                { id: 'b22', name: 'Twitch', url: 'https://www.twitch.tv', categoryId: '4' },
+                { id: 'b23', name: 'Hulu', url: 'https://www.hulu.com', categoryId: '4' },
+                { id: 'b24', name: 'Disney+', url: 'https://www.disneyplus.com', categoryId: '4' },
+                { id: 'b25', name: 'BLK3L53Y Designs', url: 'https://github.com/BLK3L53Y', categoryId: '5' }
+            ]
+        };
+        let editData = { categories: [], buttons: [] };
+        let currentButtonId = null;
+        let isDarkTheme = true;
+
+        // Navigation
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page).classList.add('active');
+            document.getElementById(page).style.display = 'block';
+            if (page === 'home') {
+                document.querySelector('.site-name').textContent = data.siteName;
+            }
+            if (page === 'settings') updateCategoryDropdown();
+        }
+
+        // Data Initialization
+        function initializeData() {
+            try {
+                const savedData = localStorage.getItem('dashboardData');
+                if (savedData) {
+                    data = JSON.parse(savedData);
+                }
+            } catch (e) {
+                // Use default data if no saved data or error
+            }
+            renderCategories();
+            updateCategoryDropdown();
+            document.querySelector('.site-name').textContent = data.siteName;
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.classList.toggle('dark-theme', isDarkTheme);
+            document.body.classList.toggle('light-theme', !isDarkTheme);
+        }
+
+        // Color Swatch Change
+        function changeColorSwatch() {
+            const swatch = document.getElementById('colorSwatch').value;
+            document.body.className = `${isDarkTheme ? 'dark-theme' : 'light-theme'} swatch-${swatch}`;
+            updateButtonGradients();
+        }
+
+        function updateButtonGradients() {
+            const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
+            const secondary = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim();
+            document.documentElement.style.setProperty('--button-gradient', `linear-gradient(45deg, ${primary}, ${secondary})`);
+        }
+
+        // Update Site Name
+        function updateSiteName() {
+            const newSiteName = document.getElementById('siteNameInput').value.trim();
+            if (newSiteName) {
+                data.siteName = newSiteName;
+                saveData();
+                document.getElementById('siteNameInput').value = '';
+                document.querySelector('.site-name').textContent = data.siteName;
+                alert('Site name updated successfully!');
+            }
+        }
+
+        // Category Management
+        function addCategory() {
+            const categoryName = document.getElementById('newCategory').value.trim();
+            if (!categoryName) return;
+            const newCategory = { id: Date.now().toString(), name: categoryName };
+            data.categories.push(newCategory);
+            saveData();
+            updateCategoryDropdown();
+            renderCategories();
+            document.getElementById('newCategory').value = '';
+        }
+
+        function updateCategoryDropdown() {
+            const select = document.getElementById('categorySelect');
+            select.innerHTML = '<option value="">Select Category</option>';
+            data.categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                select.appendChild(option);
+            });
+            const addNewOption = document.createElement('option');
+            addNewOption.value = 'add-new';
+            addNewOption.textContent = 'Add New Category';
+            select.appendChild(addNewOption);
+        }
+
+        function toggleNewCategoryInput() {
+            const select = document.getElementById('categorySelect');
+            const newCategoryInput = document.getElementById('newCategoryInButton');
+            newCategoryInput.style.display = select.value === 'add-new' ? 'block' : 'none';
+        }
+
+        // Button Management
+        function addButton() {
+            const name = document.getElementById('newButtonName').value.trim();
+            let url = document.getElementById('buttonUrl').value.trim();
+            let categoryId = document.getElementById('categorySelect').value;
+            const newCategoryName = document.getElementById('newCategoryInButton').value.trim();
+
+            if (!name || !url) return;
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            if (categoryId === 'add-new' && newCategoryName) {
+                const newCategory = { id: Date.now().toString(), name: newCategoryName };
+                data.categories.push(newCategory);
+                categoryId = newCategory.id;
+            }
+
+            if (!categoryId || categoryId === 'add-new') return;
+
+            const newButton = { id: Date.now().toString(), name, url, categoryId };
+            data.buttons.push(newButton);
+            saveData();
+            updateCategoryDropdown();
+            renderCategories();
+            document.getElementById('newButtonName').value = '';
+            document.getElementById('buttonUrl').value = '';
+            document.getElementById('newCategoryInButton').value = '';
+            document.getElementById('categorySelect').value = '';
+            toggleNewCategoryInput();
+        }
+
+        // Data Export & Import
+        function exportData() {
+            // Clone data to avoid mutating the original
+            const exportObj = JSON.parse(JSON.stringify(data));
+            // Add notes, username, password for each button from localStorage
+            exportObj.buttons.forEach(button => {
+                button.notes = localStorage.getItem(`notes_${button.id}`) || "";
+                button.username = localStorage.getItem(`username_${button.id}`) || "";
+                button.password = localStorage.getItem(`password_${button.id}`) || "";
+            });
+            const dataStr = JSON.stringify(exportObj, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dashboard_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    data = JSON.parse(e.target.result);
+                    // Restore notes, username, password for each button to localStorage
+                    if (data.buttons) {
+                        data.buttons.forEach(button => {
+                            if (button.notes !== undefined) {
+                                localStorage.setItem(`notes_${button.id}`, button.notes);
+                            }
+                            if (button.username !== undefined) {
+                                localStorage.setItem(`username_${button.id}`, button.username);
+                            }
+                            if (button.password !== undefined) {
+                                localStorage.setItem(`password_${button.id}`, button.password);
+                            }
+                        });
+                    }
+                    saveData();
+                    updateCategoryDropdown();
+                    renderCategories();
+                    document.querySelector('.site-name').textContent = data.siteName;
+                    showImportPopup();
+                } catch (error) {
+                    alert('Error importing data: Invalid JSON file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showImportPopup() {
+            const overlay = document.getElementById('overlay');
+            let importPopup = document.getElementById('importPopup');
+            if (!importPopup) {
+                importPopup = document.createElement('div');
+                importPopup.id = 'importPopup';
+                importPopup.className = 'popup';
+                importPopup.innerHTML = `<div class="popup-content"><h2>Buttons Imported</h2><div class="save-cancel"><button onclick="closeImportPopup()">OK</button></div></div>`;
+                document.body.appendChild(importPopup);
+            }
+            overlay.style.display = 'block';
+            importPopup.style.display = 'block';
+        }
+
+        function closeImportPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('importPopup').style.display = 'none';
+        }
+
+        // Category and Button Rendering
+        function renderCategories() {
+            const container = document.getElementById('categories');
+            container.innerHTML = '';
+            data.categories.forEach(category => {
+                const details = document.createElement('details');
+                details.open = true;
+                details.draggable = true;
+                details.dataset.categoryId = category.id;
+                const summary = document.createElement('summary');
+                summary.textContent = category.name;
+                details.appendChild(summary);
+
+                const buttonGrid = document.createElement('div');
+                const buttons = data.buttons.filter(button => button.categoryId === category.id);
+                buttonGrid.className = 'button-grid';
+                // Center buttons if less than 4 in a row by adding empty grid items
+                if (buttons.length > 0 && buttons.length < 4) {
+                    const emptySlots = 4 - buttons.length;
+                    const padStart = Math.floor(emptySlots / 2);
+                    const padEnd = emptySlots - padStart;
+                    for (let i = 0; i < padStart; i++) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'button-item invisible';
+                        buttonGrid.appendChild(emptyDiv);
+                    }
+                    buttons.forEach(button => {
+                        const buttonItem = document.createElement('div');
+                        buttonItem.className = 'button-item';
+                        buttonItem.draggable = true;
+                        buttonItem.dataset.buttonId = button.id;
+
+                        const linkButton = document.createElement('button');
+                        linkButton.className = 'link-button';
+                        linkButton.textContent = button.name;
+                        linkButton.onclick = () => {
+                            let url = button.url;
+                            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                                url = 'https://' + url;
+                            }
+                            window.open(url, '_blank');
+                        };
+
+                        const noteButton = document.createElement('button');
+                        noteButton.className = 'note-button';
+                        noteButton.textContent = '+';
+                        noteButton.onclick = (e) => {
+                            e.stopPropagation();
+                            showPopup(button.id, button.name);
+                        };
+
+                        buttonItem.appendChild(linkButton);
+                        buttonItem.appendChild(noteButton);
+                        buttonGrid.appendChild(buttonItem);
+                    });
+                    for (let i = 0; i < padEnd; i++) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'button-item invisible';
+                        buttonGrid.appendChild(emptyDiv);
+                    }
+                } else {
+                    buttons.forEach(button => {
+                        const buttonItem = document.createElement('div');
+                        buttonItem.className = 'button-item';
+                        buttonItem.draggable = true;
+                        buttonItem.dataset.buttonId = button.id;
+
+                        const linkButton = document.createElement('button');
+                        linkButton.className = 'link-button';
+                        linkButton.textContent = button.name;
+                        linkButton.onclick = () => {
+                            let url = button.url;
+                            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                                url = 'https://' + url;
+                            }
+                            window.open(url, '_blank');
+                        };
+
+                        const noteButton = document.createElement('button');
+                        noteButton.className = 'note-button';
+                        noteButton.textContent = '+';
+                        noteButton.onclick = (e) => {
+                            e.stopPropagation();
+                            showPopup(button.id, button.name);
+                        };
+
+                        buttonItem.appendChild(linkButton);
+                        buttonItem.appendChild(noteButton);
+                        buttonGrid.appendChild(buttonItem);
+                    });
+                }
+
+                details.appendChild(buttonGrid);
+                container.appendChild(details);
+            });
+
+            document.querySelectorAll('.button-item').forEach(div => {
+                div.addEventListener('dragstart', handleButtonDragStart);
+                div.addEventListener('dragover', handleDragOver);
+                div.addEventListener('drop', handleButtonDrop);
+            });
+
+            document.querySelectorAll('details').forEach(detail => {
+                detail.addEventListener('dragstart', handleCategoryDragStart);
+                detail.addEventListener('dragover', handleDragOver);
+                detail.addEventListener('drop', handleCategoryDrop);
+            });
+        }
+
+        // Drag and Drop for Categories
+        let draggedCategory = null;
+
+        function handleCategoryDragStart(e) {
+            draggedCategory = e.target;
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleCategoryDrop(e) {
+            e.preventDefault();
+            if (draggedCategory && draggedCategory !== e.target.closest('details')) {
+                const categories = document.querySelectorAll('#categories details');
+                const draggedIndex = Array.from(categories).indexOf(draggedCategory);
+                const targetIndex = Array.from(categories).indexOf(e.target.closest('details'));
+                if (draggedIndex !== -1 && targetIndex !== -1) {
+                    const [movedCategory] = data.categories.splice(draggedIndex, 1);
+                    data.categories.splice(targetIndex, 0, movedCategory);
+                    data.buttons.forEach(button => {
+                        if (button.categoryId === movedCategory.id) {
+                            button.categoryId = movedCategory.id;
+                        }
+                    });
+                    saveData();
+                    renderCategories();
+                }
+            }
+            draggedCategory = null;
+        }
+
+        // Drag and Drop for Buttons
+        let draggedButton = null;
+
+        function handleButtonDragStart(e) {
+            draggedButton = e.target.closest('.button-item');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleButtonDrop(e) {
+            e.preventDefault();
+            if (draggedButton && draggedButton !== e.target.closest('.button-item')) {
+                const target = e.target.closest('.button-item');
+                if (draggedButton.parentNode === target.parentNode && draggedButton !== target) {
+                    target.parentNode.insertBefore(draggedButton, target);
+                    const categoryId = data.buttons.find(b => b.id === draggedButton.dataset.buttonId).categoryId;
+                    const buttons = data.buttons.filter(b => b.categoryId === categoryId);
+                    const newOrder = Array.from(target.parentNode.querySelectorAll('.button-item'))
+                        .map(div => data.buttons.find(b => b.id === div.dataset.buttonId));
+                    data.buttons = data.buttons.filter(b => b.categoryId !== categoryId).concat(newOrder);
+                    saveData();
+                }
+            }
+            draggedButton = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        // Edit Content
+        function showEditContent() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('editContent').style.display = 'block';
+            editData = { categories: [...data.categories], buttons: [...data.buttons] };
+            renderEditContent();
+        }
+
+        function cancelEdit() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('editContent').style.display = 'none';
+        }
+
+        function renderEditContent() {
+            const categoryContainer = document.getElementById('editCategories');
+            categoryContainer.innerHTML = '';
+            editData.categories.forEach(category => {
+                const div = document.createElement('div');
+                div.className = 'edit-item';
+                div.innerHTML = `
+                                            <input type="text" value="${category.name}" data-id="${category.id}">
+                                            <button onclick="deleteCategory('${category.id}')">Delete</button>
+                                        `;
+                categoryContainer.appendChild(div);
+            });
+
+            const buttonContainer = document.getElementById('editButtons');
+            buttonContainer.innerHTML = '';
+            editData.buttons.forEach(button => {
+                const div = document.createElement('div');
+                div.className = 'edit-item';
+                div.innerHTML = `
+                                            <input type="text" value="${button.name}" data-id="${button.id}">
+                                            <input type="text" value="${button.url}" data-id="${button.id}">
+                                            <select data-id="${button.id}">
+                                                ${editData.categories.map(c => `<option value="${c.id}" ${c.id === button.categoryId ? 'selected' : ''}>${c.name}</option>`).join('')}
+                                            </select>
+                                            <button onclick="deleteButton('${button.id}')">Delete</button>
+                                        `;
+                buttonContainer.appendChild(div);
+            });
+        }
+
+        function deleteCategory(id) {
+            editData.categories = editData.categories.filter(c => c.id !== id);
+            editData.buttons = editData.buttons.filter(b => b.categoryId !== id);
+            renderEditContent();
+        }
+
+        function deleteButton(id) {
+            editData.buttons = editData.buttons.filter(b => b.id !== id);
+            renderEditContent();
+        }
+
+        function saveAll() {
+            const updatedCategories = Array.from(document.querySelectorAll('#editCategories .edit-item input'))
+                .map(input => ({ id: input.dataset.id, name: input.value.trim() }));
+            const updatedButtons = Array.from(document.querySelectorAll('#editButtons .edit-item'))
+                .map(div => {
+                    const inputs = div.querySelectorAll('input');
+                    const select = div.querySelector('select');
+                    return {
+                        id: inputs[0].dataset.id,
+                        name: inputs[0].value.trim(),
+                        url: inputs[1].value.trim(),
+                        categoryId: select.value
+                    };
+                });
+            editData.categories = updatedCategories;
+            editData.buttons = updatedButtons;
+            data.categories = editData.categories;
+            data.buttons = editData.buttons;
+            saveData();
+            renderCategories();
+            document.getElementById('editContent').style.display = 'none';
+        }
+
+        // Popup Functionality
+        function showPopup(buttonId, buttonName) {
+            currentButtonId = buttonId;
+            const notes = localStorage.getItem(`notes_${buttonId}`) || '';
+            const username = localStorage.getItem(`username_${buttonId}`) || '';
+            const password = localStorage.getItem(`password_${buttonId}`) || '';
+            document.getElementById('popupTitle').textContent = `Notes for ${buttonName}`;
+            document.getElementById('popupNotes').value = notes;
+            document.getElementById('popupUsername').value = username;
+            document.getElementById('popupPassword').value = password;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function copyToClipboard(fieldId) {
+            const input = document.getElementById(fieldId);
+            input.select();
+            document.execCommand('copy');
+        }
+
+        function savePopup() {
+            const notes = document.getElementById('popupNotes').value;
+            const username = document.getElementById('popupUsername').value;
+            const password = document.getElementById('popupPassword').value;
+            if (currentButtonId) {
+                if (notes) localStorage.setItem(`notes_${currentButtonId}`, notes);
+                else localStorage.removeItem(`notes_${currentButtonId}`);
+                if (username) localStorage.setItem(`username_${currentButtonId}`, username);
+                else localStorage.removeItem(`username_${currentButtonId}`);
+                if (password) localStorage.setItem(`password_${currentButtonId}`, password);
+                else localStorage.removeItem(`password_${currentButtonId}`);
+            }
+            cancelPopup();
+        }
+
+        function cancelPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupNotes').value = '';
+            document.getElementById('popupUsername').value = '';
+            document.getElementById('popupPassword').value = '';
+        }
+
+        // Reset Functionality
+        function showResetPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('resetPopup').style.display = 'block';
+        }
+
+        function cancelReset() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('resetPopup').style.display = 'none';
+        }
+
+        function resetToDefaults() {
+            // Remove all notes, username, and password keys from localStorage
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('notes_') || key.startsWith('username_') || key.startsWith('password_')) {
+                    localStorage.removeItem(key);
+                }
+            });
+            data = {
+                siteName: "My Dashboard",
+                categories: [
+                    { id: '5', name: 'GitHub' },
+                    { id: '1', name: 'Social Media' },
+                    { id: '3', name: 'Shopping' },
+                    { id: '4', name: 'Entertainment' }
+                ],
+                buttons: [
+                    { id: 'b1', name: 'Facebook', url: 'https://www.facebook.com', categoryId: '1' },
+                    { id: 'b2', name: 'Twitter', url: 'https://www.twitter.com', categoryId: '1' },
+                    { id: 'b3', name: 'Instagram', url: 'https://www.instagram.com', categoryId: '1' },
+                    { id: 'b4', name: 'LinkedIn', url: 'https://www.linkedin.com', categoryId: '1' },
+                    { id: 'b5', name: 'Reddit', url: 'https://www.reddit.com', categoryId: '1' },
+                    { id: 'b6', name: 'Pinterest', url: 'https://www.pinterest.com', categoryId: '1' },
+                    { id: 'b13', name: 'Amazon', url: 'https://www.amazon.com', categoryId: '3' },
+                    { id: 'b14', name: 'eBay', url: 'https://www.ebay.com', categoryId: '3' },
+                    { id: 'b15', name: 'Walmart', url: 'https://www.walmart.com', categoryId: '3' },
+                    { id: 'b16', name: 'Target', url: 'https://www.target.com', categoryId: '3' },
+                    { id: 'b17', name: 'Etsy', url: 'https://www.etsy.com', categoryId: '3' },
+                    { id: 'b18', name: 'Best Buy', url: 'https://www.bestbuy.com', categoryId: '3' },
+                    { id: 'b19', name: 'YouTube', url: 'https://www.youtube.com', categoryId: '4' },
+                    { id: 'b20', name: 'Netflix', url: 'https://www.netflix.com', categoryId: '4' },
+                    { id: 'b21', name: 'Spotify', url: 'https://www.spotify.com', categoryId: '4' },
+                    { id: 'b22', name: 'Twitch', url: 'https://www.twitch.tv', categoryId: '4' },
+                    { id: 'b23', name: 'Hulu', url: 'https://www.hulu.com', categoryId: '4' },
+                    { id: 'b24', name: 'Disney+', url: 'https://www.disneyplus.com', categoryId: '4' },
+                    { id: 'b25', name: 'BLK3L53Y Designs', url: 'https://github.com/BLK3L53Y', categoryId: '5' }
+                ]
+            };
+            saveData();
+            renderCategories();
+            updateCategoryDropdown();
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('resetPopup').style.display = 'none';
+            showResetSuccessPopup();
+        }
+
+        function showResetSuccessPopup() {
+            const overlay = document.getElementById('overlay');
+            let resetSuccessPopup = document.getElementById('resetSuccessPopup');
+            if (!resetSuccessPopup) {
+                resetSuccessPopup = document.createElement('div');
+                resetSuccessPopup.id = 'resetSuccessPopup';
+                resetSuccessPopup.className = 'popup';
+                resetSuccessPopup.innerHTML = `<div class="popup-content"><h2>Dashboard reset to defaults successfully!</h2><div class="save-cancel"><button onclick="closeResetSuccessPopup()">OK</button></div></div>`;
+                document.body.appendChild(resetSuccessPopup);
+            }
+            overlay.style.display = 'block';
+            resetSuccessPopup.style.display = 'block';
+        }
+
+        function closeResetSuccessPopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('resetSuccessPopup').style.display = 'none';
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('dashboardData', JSON.stringify(data));
+        }
+
+        // File and Directory Handling
+        document.getElementById('openFileBtn').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        // Overlay click to close popups
+        document.getElementById('overlay').addEventListener('click', function() {
+            // Close all popups if overlay is clicked
+            cancelPopup();
+            cancelReset();
+            cancelEdit();
+        });
+
+        // Initialize
+        initializeData();
+        updateButtonGradients();
+    </script>
+</body>
+</html>
