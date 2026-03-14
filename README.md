@@ -1,5 +1,4 @@
-# Add a section on setting Dashboard_v1.0.html as the homepage in Edge and Chrome.
-updated_readme = """# Dashboard_v1.0  
+# Dashboard_v1.0  
 **Created by:** BLK3L53Y  
 **Created on:** 2025-08-02  
 
@@ -15,6 +14,14 @@ Works best in Microsoft Edge or Google Chrome.
 - Built-in notes, usernames, and passwords for each link (stored locally)
 - Customizable themes, title, and full backup/restore options
 - All data saved in your browser—no cloud or external storage
+
+---
+
+## 🌐 Live Demo
+
+**[Try it here → https://blk3l53y.github.io/Dashboard_v1.0/](https://blk3l53y.github.io/Dashboard_v1.0/)**
+
+> All data is saved locally in your browser — nothing is sent to any server.
 
 ---
 
@@ -180,7 +187,3 @@ Free to modify, remix, or share—credit to [BLK3L53Y](https://github.com/BLK3L5
 ---
 
 # 🚀 Enjoy using Dashboard_v1.0!
-"""
-
-with open("/mnt/data/Dashboard_v1.0_README.md", "w", encoding="utf-8") as f:
-    f.write(updated_readme)
